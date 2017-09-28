@@ -12,3 +12,4 @@ $last_login = isset($_SESSION['last_login']) ? $_SESSION['last_login'] : '';
 
 //File directory where recipe images are stored
 $directory = '../public/images/';
+
