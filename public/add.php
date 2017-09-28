@@ -113,7 +113,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		}
 		
 		//Add new picture
-		$directory = "C:/xampp/htdocs/sites/recipe_blog/public/images/";
 		$original_file = basename($_FILES["recipeImage"]["name"]);
 		$imageFileType = pathinfo($original_file,PATHINFO_EXTENSION);
 		$newFileName = evaluate_name($recipe_name);
