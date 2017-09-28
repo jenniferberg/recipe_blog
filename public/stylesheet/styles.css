@@ -1,0 +1,251 @@
+body{
+	font-family:  "Century Gothic";
+	background-color:  #f7e6ff;
+}
+
+input{
+	font-family:  "Century Gothic";
+	padding:  2px;
+	font-size:  15px;
+	width:  200px;
+	border:  1px solid grey;
+}
+
+select{
+	font-family:  "Century Gothic";
+	padding:  2px;
+	font-size:  15px;
+	border:  1px solid grey;
+	min-width:  80px;
+}
+
+a{
+	text-decoration:  none;
+	color:  #460066;
+}
+
+
+.button{
+	background-color:  lightgrey;
+	border:  1px solid black;
+	font-family:  "Century Gothic";
+	padding:  2px;
+	font-size:  15px;
+	color:  #460066;
+	width:  150px;
+	height:  30px;
+}
+
+.buttonLink{
+	background-color:  lightgrey;
+	border:  1px solid black;
+	display:  inline-block;
+	font-family:  "Century Gothic";
+	text-align:  center;
+	font-size:  15px;
+	color:  #460066;
+	width:  148px;
+	height:  20px;
+	padding:  4px;
+	
+}
+
+.centerAlign{
+	text-align:  center;
+	margin:  auto;
+}
+
+.button:hover{
+	cursor: pointer;
+	color:  blue;
+	opacity:  0.5;
+}
+
+.navigation{
+	max-width:  1100px;
+	padding:  10px;
+	text-align:  center;
+	margin:  auto;
+}
+
+.nav{
+	border:  1px solid black;
+	background-color:  white;
+	display:  inline-block;
+	font-size:  19px;
+	width:  120px;
+	text-align:  center;
+	padding:  5px;
+	margin:  5px;
+}
+
+.choice{
+	display:  inline-block;
+	font-size:  30px;
+	border:  1px solid black;
+	text-align: center;
+	height: 30px;
+	width: 130px;
+    color: black;
+    padding: 85px 25px;
+	margin:  5px;
+}
+
+a:hover{
+	color:  blue;
+	opacity:  0.5;
+}
+
+.meal{
+	background-image:  url("../images/breadcrustedtilapia.jpg");
+}
+
+.snack{
+	background-image:  url("../images/fruitandcheeseskewers.jpg");
+}
+
+.dessert{
+	background-image:  url("../images/chocolatelavacake.jpg");
+}
+
+.main{
+	margin:  auto;
+	border: 1px solid black;
+	background-color:  white;
+	min-height:  500px;
+	max-height:  800px;
+	max-width:  900px;
+	text-align:  center;
+}
+
+.block{
+	display:  inline-block;
+}
+
+.recipes{
+	margin:  auto;
+	padding:  10px 15px;
+	border: 1px solid black;
+	background-color:  white;
+	max-width:  1100px;
+	text-align:  left;
+}
+
+
+#error{
+	border:  2px solid red;
+}
+
+.red{
+	color:  red;
+	font-weight:  bold;
+}
+
+.grey{
+	background-color:  lightgrey;
+}
+
+.picture{
+	height: 200px;
+	width: 180px;
+	border:  1px solid grey;
+	background-color:  white;
+	
+}
+
+.border{
+	text-align:  center;
+	color:  grey;
+}
+
+.left{
+	text-align:  left;
+	padding:  1px 5px;
+}
+
+.right{
+	text-align:  right;
+	padding:  1px 5px;
+}
+
+.center{
+	display:  inline-block;
+	vertical-align:  middle;
+}
+
+.bottom{
+	padding:  80px 0px;
+}
+
+.floatLeft{
+	float:  left;
+}
+
+.list{
+	width:  20%;
+	min-width:  345px;
+	margin:  10px 2px;
+	background-color:  lightgrey;
+	display:  inline-block;
+}
+
+.colMin{
+	min-width:  100px;
+}
+
+.colMax{
+	width:  140px;
+}
+
+.recipeHeader{
+	text-align:  center;
+	margin:  auto;
+	width:  500px;
+	padding:  5px;
+}
+
+.recipeDetail{
+	text-align:  center;
+	margin:  auto;
+	padding:  5px;
+}
+
+.section{
+	border:  1px solid black;
+	background-color:  white;
+	text-align:  center;
+	margin:  auto;
+	max-width:  650px;
+	padding:  5px;
+}
+
+.wide{
+	max-width:  900px;
+}
+
+.centerText{
+	text-align:  center;
+}
+
+.smallInput{
+	width:  80px;
+}
+
+.ins{
+	width:  600px;
+}
+
+.largeInput{
+	width:  99%;
+}
+
+.pad{
+	padding:  0px 10px;
+}
+
+.ingredients{
+	display:  inline-block;
+}
+
+
+
