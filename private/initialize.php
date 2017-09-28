@@ -9,3 +9,5 @@ require_once('validation_functions.php');
 $admin = isset($_SESSION['admin']) ? $_SESSION['admin'] : '';
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : '';
 $last_login = isset($_SESSION['last_login']) ? $_SESSION['last_login'] : '';
+
+$directory = '';
