@@ -56,7 +56,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		<br /><br />
 		<div>
 		  <input type="submit" name="submit" value="Submit" class="button"></input>
-		  <button type="button" class="button"><a href="index.php">Cancel</a></button>
+		  <a class="buttonLink block" href="index.php">Cancel</a>
 	</div>
 	</div>
   </form>
