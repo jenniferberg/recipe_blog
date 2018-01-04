@@ -11,26 +11,26 @@ $password = isset($_POST['password']) ? $_POST['password'] : '';
   If form is filled out correctly, allow user to log in.
 */
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-	$verify = verify_login($username, $password);
-	
+	$verify = $administrator->verify_login($username, $password);
+
 	if(isset($verify) && $verify !== false){
 		//Protect against session fixation
 		session_regenerate_id();
-		
+
 		$_SESSION['admin'] = $verify['type'];
 		$_SESSION['user'] = $verify['username'];
 		$_SESSION['last_login'] = time();
-		
+
 		$error_warning = "<br />";
-		
+
 		//Redirect user to main page
 		header("Location: index.php");
 		exit;
-		
+
 	} else{
 		$error_warning = "Invalid username or password.";
 	}
-	
+
 } else{
 	$error_warning = "<br />";
 }

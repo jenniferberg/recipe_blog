@@ -13,9 +13,24 @@ if($admin != 'superadmin'){
 <br />
 <div class="section">
 <div class="center">
-  <?php echo view_admins(); ?>
+  <?php $result = $administrator->select_all();
+	$count = count($result);
+
+	$output = "<table><th class=\"right\">Username</th><th class=\"left\">Access Type</th><th class=\"right\"></th>";
+	for($i = 0; $i < $count; $i++){
+		$output .= "<tr><td class=\"right\">";
+		$output .= htmlentities($result[$i]["username"]);
+		$output .= "</td><td class=\"left\">";
+		$output .= htmlentities($result[$i]["type"]);
+		$output .= "</td><td class=\"right\">";
+		$output .= "<a href=\"editAdmin.php?id=".urlencode($result[$i]["id"])."\">Edit</a>";
+	}
+	$output .= "</table>";
+
+	echo $output;
+	?>
 </div>
-</div>		
+</div>
 
 <?php
 include_once("../private/layout/footer.php");

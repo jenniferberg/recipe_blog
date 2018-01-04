@@ -4,9 +4,9 @@
 <div class="section wide">
 <div class="red centerAlign"><?php echo $error_warning; ?></div>
 <h3>Recipe Information</h3>
-<?php if(isset($validate["recipe_name"])){ echo "<div class=\"red\">*".$validate["recipe_name"]."</div>";} 
+<?php if(isset($validate["recipe_name"])){ echo "<div class=\"red\">*".$validate["recipe_name"]."</div>";}
 	  if(isset($name["recipe_name"])){ echo "<div class=\"red\">*".$name["recipe_name"]."</div>";}
-	  if(isset($validate["recipe_type"])){ echo "<div class=\"red\">*".$validate["recipe_type"]."</div>";} 
+	  if(isset($validate["recipe_type"])){ echo "<div class=\"red\">*".$validate["recipe_type"]."</div>";}
 	  if(isset($validate["calories"])){ echo "<div class=\"red\">*".$validate["calories"]."</div>";}
 	  if(isset($validate["active"])){ echo "<div class=\"red\">*".$validate["active"]."</div>";}
 	  if(isset($uploadOk) && $uploadOk == 0){ echo "<div class=\"red\">*".$picture_error."</div>";}
@@ -20,16 +20,16 @@
     <td class="right">Recipe Type:</td>
 	<td class="left"><select <?php if(isset($validate["recipe_type"])){ echo "id=\"error\"";} ?> name="recipe_type">
 		  <?php
-		  foreach($recipe_types as $type){
+		  foreach(Recipe::$recipe_types as $type){
 			  $option  = "<option value=";
 			  $option .= "{$type}";
 			  if(isset($recipe_type) && $type == $recipe_type)
-				{$option .= " selected";} 
+				{$option .= " selected";}
 			  $option .= ">{$type}</option>";
-			  
+
 			  echo $option;
 		  }
-		  ?> 
+		  ?>
 		</select>
 	</td>
   </tr>
@@ -93,36 +93,29 @@ for ($m = 1; $m < $end_h; $m++){
   <?php
 	for ($m = 1; $m < $end_h; $m++){
 	  //Create HTML inputs
-	  
-	  //Hidden ingredient ID (for editing recipe ingredients)
-	  /*
-	  if(isset($ingredient_id[$m])){
-		 echo "<tr><td><input type=\"hidden\" name=\"ingredient_id{$m}\" value=\"{$ingredient_id[$m]}\"/></td>"; 
-	  }*/
-	  
 	  //Ingredient name
 	  echo "<tr><td><input ";
 	  if(isset($validate["ingredient_name{$m}"])){ echo "id=\"error\"";}
 	  echo "type=\"text\" name=\"ingredient_name{$m}\" value=\"{$ingredient_name[$m]}\"/></td>";
-	  
+
 	  //Amount
 	  echo "<td><input class=\"smallInput\"";
 	  if(isset($validate["amount{$m}"])){ echo "id=\"error\"";}
 	  echo "type=\"text\" name=\"amount{$m}\" value=\"{$amount[$m]}\" />";
-	  
+
 	  //Unit of Measure
 	  echo "<td><select ";
 	  if(isset($validate["unit{$m}"])){ echo "id=\"error\"";}
 	  echo "name=\"unit{$m}\">";
-	  foreach($units_of_measure as $uom){
+	  foreach(RecipeIngredient::$units_of_measure as $uom){
 		  $option  = "<option value=";
 		  $option .= "{$uom}";
 		  if(isset($unit[$m]) && $uom == $unit[$m])
-			{$option .= " selected";} 
+			{$option .= " selected";}
 		  $option .= ">{$uom}</option>";
 		  echo $option;
 		}
-	  echo	 "</select>";	  
+	  echo	 "</select>";
 	  echo "</td></tr>";
   }
   ?>
@@ -154,23 +147,6 @@ for ($j = 1; $j < $end_i; $j++){
 	) {echo "<div class=\"red\">*".$min["time{$j}"]."</div>"; break;}
 }
 
-
-/*
-for ($j = 1; $j < $end_i; $j++){
-	if(isset($validate["time{$j}"]) || isset($validate["instruction{$j}"])){
-		$errors = "<div>Line {$j}:  ";
-		if(isset($validate["time{$j}"])){
-			$errors .= $validate["time{$j}"];
-		} 
-		if(isset($validate["instruction{$j}"])){
-			$errors .= $validate["instruction{$j}"];
-		} 
-		$errors .= "</div>";
-	} else {
-		$errors = "";
-	}
-	echo $errors;
-}*/
 ?>
 <table class="centerAlign">
   <thead>
@@ -182,18 +158,17 @@ for ($j = 1; $j < $end_i; $j++){
   </thead>
   <tbody id="instructions">
   <?php
-  
+
   for ($j = 1; $j < $end_i; $j++){
 	  //Create HTML inputs
 	  //Instruction Number
-	  /*echo "<td><input type=\"hidden\" name=\"count\" value=\"{$j}\"/></td>";*/
 	  echo "<tr><td class=\"centerText\">{$j}</td>";
-	  
+
 	  //Time
 	  echo "<td><input class=\"smallInput\"";
 	  if(isset($validate["time{$j}"])){ echo "id=\"error\"";}
 	  echo "type=\"number\" name=\"time{$j}\" value=\"{$time[$j]}\"/></td>";
-	  
+
 	  //Instruction
 	  echo "<td class=\"ins\"><input class=\"largeInput\"";
 	  if(isset($validate["instruction{$j}"])){ echo "id=\"error\"";}
@@ -255,20 +230,20 @@ removeIngredient.addEventListener("click", function(){
 function add(type, section){
 	if(type == "instructions"){ i++;}
 	else{ h++;}
-	
+
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET","../private/addLines.php?h="+h+"&i="+i, true);
 
 	xhr.onreadystatechange = function(){
 		if(xhr.readyState == 4 && xhr.status == 200){
-			
+
 			var newLine = document.createElement("TR");
 			var newCol = [];
-			
+
 			for(j=1; j<4; j++){
 				newCol[j] = document.createElement("TD");
 			}
-			
+
 
 			var time = document.createElement("input");
 				time.setAttribute("class","smallInput");
@@ -278,10 +253,6 @@ function add(type, section){
 				inst.setAttribute("type","text");
 				inst.setAttribute("class","largeInput");
 				inst.setAttribute("name","instruction"+i)
-			/*var count = document.createElement("input");
-				count.setAttribute("type","hidden");
-				count.setAttribute("name", "count");
-				count.setAttribute("value", i);*/
 			var ingredientName = document.createElement("input");
 				ingredientName.setAttribute("type","text");
 				ingredientName.setAttribute("name","ingredient_name"+h);
@@ -291,22 +262,22 @@ function add(type, section){
 				amount.setAttribute("name","amount"+h);
 			var unit = document.createElement("select");
 				unit.setAttribute("name","unit"+h);
-				
+
 			var units_of_measure = [
-				<?php foreach($units_of_measure as $unit){
+				<?php foreach(RecipeIngredient::$units_of_measure as $unit){
 					echo "'{$unit}',";
 				} ?> ]
-			
+
 			length = units_of_measure.length;
-		
+
 			for(x = 0; x < length; x++){
 				var option = document.createElement("option");
 					option.setAttribute("value",units_of_measure[x]);
 				var optionName = document.createTextNode(units_of_measure[x]);
-					option.appendChild(optionName);	
+					option.appendChild(optionName);
 					unit.appendChild(option);
 			}
-					
+
 			if(type == "instructions"){
 				var number = document.createTextNode(i);
 
@@ -315,17 +286,17 @@ function add(type, section){
 				//newCol[1].appendChild(count);
 				newCol[2].appendChild(time);
 				newCol[3].appendChild(inst);
-				
+
 				for(k=1; k<4; k++){
 				newLine.appendChild(newCol[k]);
 			}
 			} else{
 				var number = document.createTextNode(h);
-				
+
 				newCol[1].appendChild(ingredientName);
 				newCol[2].appendChild(amount);
 				newCol[3].appendChild(unit);
-				
+
 				for(k=1; k<4; k++){
 					newLine.appendChild(newCol[k]);
 				}
@@ -338,19 +309,19 @@ function add(type, section){
 			} else{
 				removeInstruction.hidden = false;
 			}
-			
+
 			if(i > 999){
 				addInstruction.hidden = true;
 			} else{
 				addInstruction.hidden = false;
 			}
-			
+
 			if(h <= 1){
 				removeIngredient.hidden = true;
 			} else{
 				removeIngredient.hidden = false;
 			}
-			
+
 			if(h > 999){
 				addIngredient.hidden = true;
 			} else{
@@ -364,33 +335,33 @@ function add(type, section){
 function remove(type, section){
 	if(type == "instructions"){ i--;}
 	else{ h--;}
-	
+
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET","../private/addLines.php?i="+i+"&h="+h, true);
 
 	xhr.onreadystatechange = function(){
 		if(xhr.readyState == 4 && xhr.status == 200){
-			
+
 			section.removeChild(section.lastChild);
-			
+
 			if(i <= 1){
 				removeInstruction.hidden = true;
 			} else{
 				removeInstruction.hidden = false;
 			}
-			
+
 			if(i > 999){
 				addInstruction.hidden = true;
 			} else{
 				addInstruction.hidden = false;
 			}
-			
+
 			if(h <= 1){
 				removeIngredient.hidden = true;
 			} else{
 				removeIngredient.hidden = false;
 			}
-			
+
 			if(h > 999){
 				addIngredient.hidden = true;
 			} else{

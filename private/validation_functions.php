@@ -15,7 +15,7 @@ function readable_name($variable){
 function evaluate_name($name){
 	$name = strtolower($name);
 	$name = str_replace(" ","",$name);
-	
+
 	return $name;
 }
 
@@ -23,30 +23,25 @@ function evaluate_name($name){
 function does_recipe_exist($recipe_name, $id=0){
 	global $db;
 	$original_name = $recipe_name;
-	
+
 	$recipe_name = evaluate_name($recipe_name);
-	$recipe_name_safe = mysqli_real_escape_string($db, $recipe_name);
-	$id_safe = mysqli_real_escape_string($db, $id);
-	
+	$recipe_name_safe = $db->escape_string($recipe_name);
+	$id_safe = $db->escape_string($id);
+
 	//Query the Recipes table for specified recipe name
 	$query  = "SELECT count(*) as countNames FROM Recipes ";
 	$query .= "WHERE lower(replace(recipe_name,' ','')) = '{$recipe_name_safe}' ";
 	$query .= "AND id <> '{$id_safe}'";
-	
-	$result = mysqli_query($db, $query);
-	//Test for errors in query
-	if(!$result){
-		die("Database query failed");
-	}
-	
-	$recipe_exists = mysqli_fetch_assoc($result);
+
+	$result = $db->db_query($query);
+
+	$recipe_exists = $db->db_fetch_assoc($result);
 
 	$message = [];
 	if($recipe_exists["countNames"] != 0){
 		$message["recipe_name"] = "The recipe name \"{$original_name}\" already exists. Please enter a new name. ";
 	}
-	
-	//mysqli_free_result($result);
+
 	return $message;
 }
 
@@ -84,7 +79,7 @@ function max_length($array){
 			$message[$field] =  readable_name($field)." cannot exceed ".$limit." characters. ";
 		}
 	}
-	
+
 	return $message;
 }
 
@@ -103,7 +98,7 @@ function min_length($array){
 //Function to validate all fields for adding/editing a recipe
 function validation($required, $min_value, $max_length){
 	$message = [];
-	
+
 	foreach($required as $field){
 		if(isset(required($required)[$field])){
 			if(isset($message[$field])){
@@ -113,7 +108,7 @@ function validation($required, $min_value, $max_length){
 			}
 		}
 	}
-	
+
 	foreach($min_value as $field){
 		if(isset(min_value($min_value)[$field])){
 			if(isset($message[$field])){
@@ -123,7 +118,7 @@ function validation($required, $min_value, $max_length){
 			}
 		}
 	}
-	
+
 	foreach($max_length as $key=>$field){
 		if(isset(max_length($max_length)[$key])){
 			if(isset($message[$key])){
@@ -133,7 +128,7 @@ function validation($required, $min_value, $max_length){
 			}
 		}
 	}
-	
+
 	return $message;
 }
 
@@ -141,29 +136,25 @@ function validation($required, $min_value, $max_length){
 function does_username_exist($username, $id=0){
 	global $db;
 	$original_name = $username;
-	
+
 	$username = evaluate_name($username);
-	$username_safe = mysqli_real_escape_string($db, $username);
-	$id_safe = mysqli_real_escape_string($db, $id);
-	
+	$username_safe = $db->escape_string($username);
+	$id_safe = $db->escape_string($id);
+
 	//Query the Recipes table for specified recipe name
 	$query  = "SELECT count(*) as countNames FROM Administrators ";
 	$query .= "WHERE lower(replace(username,' ','')) = '{$username_safe}' ";
 	$query .= "AND id <> '{$id_safe}'";
-	
-	$result = mysqli_query($db, $query);
-	//Test for errors in query
-	if(!$result){
-		die("Database query failed");
-	}
-	
-	$username_exists = mysqli_fetch_assoc($result);
+
+	$result = $db->db_query($query);
+
+	$username_exists = $db->db_fetch_assoc($result);
 
 	$message = [];
 	if($username_exists["countNames"] != 0){
 		$message["username"] = "The username \"{$original_name}\" already exists. Please enter a new username. ";
 	}
-	
+
 	return $message;
 }
 
@@ -178,8 +169,6 @@ function contains_spaces($array){
 	return $contains_spaces;
 }
 
-
-
 //Function to determine if password contains required values
 function contains_values($values){
 	$contains_vals = [];
@@ -190,4 +179,3 @@ function contains_values($values){
 	}
 	return $contains_vals;
 }
-

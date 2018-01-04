@@ -9,6 +9,6 @@ There are three types of users for this website:
 
 Before you can view the website, you'll first need to:
 1.	Set up your local database appropriately. I've include a recipe_blog.sql file with the appropriate database import scripts. I've not included a data import for the administrator table, so you will need to write that yourself. I would advise setting up a user and password via an initial insert statement with type = superadmin, and then updating the user from the interface so that the password in properly encrypted.
-2.	Set up your DB connection information in the private/db_connection.php file. You'll need to add your host name, username and password to this file on lines 2, 3, and 4.
-3.  Define the beginning of the file path where the images will be saved, in the private/initialize.php file, based on where you keep this code.
+2.	Set up your DB connection information in the private/classes/database.php class file. You'll need to add your host name, username and password to this file on lines 2, 3, and 4.
+3.  	Define the beginning of the file path where the images will be saved, stored in the $directory variable in the private/initialize.php file on line 22, based on where you keep this code.
 

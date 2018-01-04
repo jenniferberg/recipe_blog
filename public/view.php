@@ -2,11 +2,17 @@
 require_once('../private/initialize.php');
 include_once("../private/layout/header.php");
 
-
-if(isset($_GET["id"])){
-	$id = htmlentities(urlencode($_GET["id"]), ENT_QUOTES);
+//Ensure id is a valid recipe
+if(isset($_GET['id'])){
+	if($recipe->select_by_id($_GET['id'])){
+		$id = htmlentities(urlencode($_GET["id"]), ENT_QUOTES);
+	} else {
+		header("Location: index.php");
+		exit;
+	}
 }
-$recipe_name = get_recipe_info($id)["recipe_name"];
+
+$recipe_name = $recipe->select_by_id($id)[0]["recipe_name"];
 ?>
 <hr />
 <div class="block">
@@ -43,21 +49,65 @@ if($admin == 'admin' || $admin == 'superadmin'){?>
 	?>
   </div>
   <div class="center">
-	<h2><?php echo get_recipe_info($id)["recipe_name"];?></h2>
-	<div class="left">Total Calories:  <?php echo get_recipe_info($id)["calories"];?></div>
-	<div class="left">Number of Ingredients:  <?php echo count(get_ingredients_by_id($id));?></div>
-	<div class="left">Total Time:  <?php echo get_total_time($id);?> minutes</div>
+	<h2><?php echo $recipe->select_by_id($id)[0]["recipe_name"];?></h2>
+	<div class="left">Total Calories:  <?php echo $recipe->select_by_id($id)[0]["calories"];?></div>
+	<div class="left">Number of Ingredients:  <?php echo count($recipe_ingredient->get_ingredients_by_id($id));?></div>
+	<div class="left">Total Time:  <?php echo $recipe_instruction->get_total_time($id);?> minutes</div>
   </div>
 
 </div>
 <div class="recipeDetail">
  <div class="section">
-	<div class="center"><?php echo view_recipe_ingredients($id); ?></div>
+	<div class="center">
+		<?php
+		//Get the ingredients for the selected recipe
+		$result = $recipe_ingredient->get_ingredients_by_id($id);
+		$count = count($result);
+
+		//Output data
+		$output  = "<table class=\"center\">";
+		for($i=0; $i < $count; $i++){
+			$output .= "<tr><td class=\"right colMax\">";
+			$output .= htmlentities($recipe_ingredient->ingredient_name[$i]);
+			$output .= "</td><td class=\"left colMax\">";
+			$output .= htmlentities($recipe_ingredient->amount[$i])." ". htmlentities($recipe_ingredient->unit[$i]);
+			$output .= "</td></tr>";
+		}
+
+		$output .= "</table>";
+
+		echo $output;
+		?>
+
+	</div>
 </div>
 </div>
 <div class="recipeDetail">
 <div class="section">
-	<div class="center"><?php echo view_recipe_instructions($id); ?></div>
+	<div class="center">
+		<?php
+		//Get instructions for the selected recipe
+		$result = $recipe_instruction->get_instructions_by_id($id);
+		$count = count($result);
+
+		$output  = "<table class=\"center\">";
+		$output .= "<th></th><th>Instruction</th><th>Time (Minutes)</th>";
+
+		for($i=0; $i < $count; $i++){
+			$output .= "<tr><td class=\"left\">";
+			$output .= htmlentities($recipe_instruction->instruction_number[$i]);
+			$output .= "</td><td class=\"left colMin\">";
+			$output .= htmlentities($recipe_instruction->instruction[$i]);
+			$output .= "</td><td class=\"colMax\">";
+			$output .= htmlentities($recipe_instruction->time[$i]);
+			$output .= "</td></tr>";
+
+		}
+		$output .= "</table>";
+
+		echo $output;
+		?>
+	</div>
 </div>
 </div>
 

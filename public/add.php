@@ -34,14 +34,13 @@ for ($m = 1; $m < $end_h; $m++){
 	$unit[$m] = isset($_POST["unit{$m}"]) ? htmlentities($_POST["unit{$m}"]) : '';
 }
 
-for ($j = 1; $j < $end_i; $j++){ 
+for ($j = 1; $j < $end_i; $j++){
   $time[$j] = isset($_POST["time{$j}"]) ? (int)htmlentities($_POST["time{$j}"]) : '';
   $instruction[$j] = isset($_POST["instruction{$j}"]) ? htmlentities($_POST["instruction{$j}"], ENT_QUOTES) : '';
 }
 
-
 //Create empty arrays to add recipe information to before adding to database
-$recipe = [];
+$recipe_header = [];
 $ingredients = [];
 $instructions = [];
 
@@ -49,18 +48,18 @@ $instructions = [];
   If there are form errors, display error messages.
   If form is filled out correctly, enter new recipe into the database.
 */
-if($_SERVER['REQUEST_METHOD'] == 'POST'){	
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	//Determine if recipe name already exists
 	if(isset($_POST["recipe_name"])){
 		$name = does_recipe_exist($_POST["recipe_name"]);
 	} else {$name = [];}
-	
+
 	//Array of fields that are required to be completed
 	$required_fields = ["recipe_name","recipe_type","calories","active"];
-	
+
 	//Array of fields that have a minimum value of 1
 	$min_values = ["calories"];
-	
+
 	//Array of fields with maximum character limits
 	$max_values = ["recipe_name" => 50, "recipe_type" => 10, "calories" => 11, "active" => 1];
 
@@ -69,68 +68,88 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		$required_fields[] = "ingredient_name{$m}";
 		$required_fields[] = "amount{$m}";
 		$required_fields[] = "unit{$m}";
-		
+
 		$max_values["ingredient_name{$m}"] = 50;
 		$max_values["amount{$m}"] = 10;
 		$max_values["unit{$m}" ] = 20;
 	}
-	
+
 	//Determine how many instructions are listed - add to required, minimum value, and max character limit arrays
 	for($x=1; $x < $end_i; $x++){
 		$min_values[] = "time{$x}";
 
 		$required_fields[] = "time{$x}";
 		$required_fields[] = "instruction{$x}";
-		
+
 		$max_values["time{$x}"] = 11;
 	}
-	
+
 	//Validate fields identified in the required, minimum value, and max character limit arrays
 	$validate = validation($required_fields, $min_values, $max_values);
 	$req = required($required_fields);
 	$min = min_value($min_values);
 	$max = max_length($max_values);
-	
+
 	//If there are no validation errors, insert new recipe into database and redirect user to main page
 	if($validate == [] && $name == []){
-		//Create array $recipe to add recipe header information
-		$recipe["recipe_name"] = $recipe_name;
-		$recipe["recipe_type"] = $recipe_type;
-		$recipe["calories"] = $calories;
-		$recipe["active"] = $active;
-		
+		//Create array $recipe_header to add recipe header information
+		$recipe_header["recipe_name"] = $recipe_name;
+		$recipe_header["recipe_type"] = $recipe_type;
+		$recipe_header["calories"] = $calories;
+		$recipe_header["active"] = $active;
+
 		//Create array $ingredients to add ingredient information
 		for($m=1; $m < $end_h; $m++){
 			$ingredients["ingredient_name{$m}"] = $_POST["ingredient_name{$m}"];
 			$ingredients["amount{$m}"] = $_POST["amount{$m}"];
-			$ingredients["unit{$m}"] = $_POST["unit{$m}"];				
+			$ingredients["unit{$m}"] = $_POST["unit{$m}"];
 		}
-		
+
 		//Create array $instructions to add instruction information
 		for ($j = 1; $j < $end_i; $j++){
 			$instructions["time{$j}"] = $_POST["time{$j}"];
 			$instructions["instruction{$j}"] = $_POST["instruction{$j}"];
 		}
-		
+
 		//Add new picture
 		$original_file = basename($_FILES["recipeImage"]["name"]);
 		$imageFileType = pathinfo($original_file,PATHINFO_EXTENSION);
 		$newFileName = evaluate_name($recipe_name);
-		
+
 		$file = $directory.$newFileName.".".$imageFileType;
-		
+
 		$uploadOk = 1;
 		move_uploaded_file($_FILES["recipeImage"]["tmp_name"], $file);
-		
+
 		//Add new recipe
-		add_recipe($recipe, $ingredients, $instructions, $end_h, $end_i);
-		
-	} 
+		//add_recipe($recipe, $ingredients, $instructions, $end_h, $end_i);
+
+		//Add new recipe header
+		$recipe->insert($recipe_header);
+
+		//Get the id of the new recipe
+		$rec_id = $db->get_id();
+
+		//Add new recipe ingredients
+		$recipe_ingredient->add_recipe_ingredients($ingredients, $rec_id, $end_h);
+
+		//Add new recipe instructions
+		$recipe_instruction->add_recipe_instructions($instructions, $rec_id, $end_i);
+
+		//Reset session line count values to zero
+		$_SESSION["i"] = 0;
+		$_SESSION["h"] = 0;
+
+		//Redirect user to view the newly added recipe
+		header("Location: view.php?id=".urlencode($rec_id));
+		exit;
+
+	}
 	//If there are validation errors, do not submit recipe to database
 	else{
 		$error_warning = "Please fix the below errors.";
 	}
-	
+
 } else {
 	$error_warning = "";
 	$req = [];

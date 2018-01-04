@@ -6,9 +6,13 @@ if($admin != 'superadmin'){
 	exit;
 }elseif(isset($_POST['id'])){
 	$id = $_POST["id"];
+
+	$administrator->delete($id);
 	
-	delete_admin($id);
-	
+	//Redirect user to view admins page
+	header("Location: ../public/admins.php");
+	exit;
+
 } else{
 	header("Location: ../public/index.php");
 	exit;
